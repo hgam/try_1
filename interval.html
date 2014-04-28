@@ -1,0 +1,32 @@
+<html>
+	<head>
+		<script  type="text/javascript" src="jquery-1.9.1.js"></script>
+		<script>
+			$(document).ready(function(){
+				var x= 2;
+				var terval = 0;
+				var jon = Math.floor(123.999);
+				alert(jon);
+				function main(){
+					terval = setInterval(isi,10);
+				}
+				function isi()
+				{
+					$('div').html(x+' '+terval);
+					x=x+1;
+					
+					if (x == 500){
+						clearInterval(1);
+					}
+				}
+				
+				main();
+			});
+		</script>
+	</head>
+	<body>
+		<div>
+		a
+		</div>
+	</body>
+</html>

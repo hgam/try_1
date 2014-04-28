@@ -1,0 +1,171 @@
+<!DOCTYPE>
+<html>
+	<head>
+		<script  type="text/javascript" src="jquery.min.js"></script>
+		<script>
+			$(document).ready(function(){
+				
+				var x 			= 150;
+				var y 			= 150;
+				var xx			= 2;
+				var yy			= 4;
+				var width		;
+				var height		;
+				var can_1		;
+				var kotakx		;
+				var kotakw		;
+				var kotakh		;
+				var intervalID 	= 0;
+				var tekankiri 	= false;
+				var tekankanan 	= false;
+				var bata		;
+				var nkolum		;
+				var nbaris		;
+				var kolumh		;
+				var barisw		;
+				var kolum		;
+				var baris		;
+				var bataw		;
+				var batah		;
+				var padding 	;
+				
+				
+				function main()
+				{
+					can_1	 = $('#can-1')[0].getContext("2d");
+					width	 = $('#can-1').width();
+					height	 = $('#can-1').height();
+					interval();
+				}
+				
+				function interval()
+				{
+					intervalID = setInterval(draw_move,20);
+				}
+				
+				function main_kotak()
+				{
+					kotakx	= width/2;
+					kotakh	= 10;
+					kotakw	= 75;
+				}
+				
+				function main_bata()
+				{
+					nkolum	= 5;
+					nbaris	= 5;
+					padding = 1;
+					bataw	= (width/nbaris) -1;
+					batah	= 15;
+					
+					bata	= new Array(nbaris);
+					for(i=0;i<nbaris;i++)
+					{
+						bata[i]	= new Array(nkolum);
+						for(j=0;j<nkolum;j++)
+						{
+							bata[i][j] = 1;
+						}
+					}
+				}
+				
+				function bulat(x,y)
+				{
+					can_1.beginPath();
+					can_1.arc(x,y,10,0,Math.PI*2,true);
+					can_1.closePath();
+					can_1.fill();
+				}
+				
+				function kotak(x,y,w,h)
+				{
+					can_1.beginPath();
+					can_1.rect(x,y,w,h);
+					can_1.closePath();
+					can_1.fill();
+				}
+				function bersih()
+				{
+					can_1.clearRect(0,0,width,height);
+				}
+				function draw_move()
+				{
+					bersih();
+					bulat(x,y);
+					
+					
+					if (tekankanan)
+						kotakx = kotakx + 10;
+					if (tekankiri)
+						kotakx = kotakx - 10;
+					
+					kotak(kotakx,height-kotakh,kotakw,kotakh);
+					
+					for(i=0;i < nbaris;i++)
+					{
+						for(j=0;j<nkolum;j++)
+						{
+							if(bata[i][j] == 1)
+							{
+								kotak((j * (bataw+padding))+padding,(i * (batah+padding))+padding,bataw,batah );
+							}
+						}
+					}
+					
+					barish	= batah+padding;
+					kolumw	= bataw+padding;
+					baris	= Math.floor(y/barish);
+					kolum	= Math.floor(x/kolumw);
+					
+					if(y < nbaris * barish && bata[baris][kolum] == 1 && baris >=0 && kolum >=0)
+					{
+						yy = -yy;
+						bata[baris][kolum]	= 0;
+					}
+					
+					if ((x + xx) > width || (x + xx) < 0){
+						xx = -xx;
+					}
+					if ((y + yy) < 0){
+						yy = -yy;
+					}
+					else if (y + yy > height){
+						if(x > kotakx && x < kotakx+kotakw)
+							yy = -yy;
+						else
+							clearInterval(intervalID);
+					}
+					
+					x = x + xx;
+					y = y + yy;
+					$("#angka").html(x+'=x '+intervalID+' y='+y);
+				}
+				
+				main();
+				main_kotak();
+				main_bata();
+				
+				$(document).keydown(function(evt){
+					if (evt.keyCode == 39)
+						tekankanan = true;
+					if (evt.keyCode == 37)
+						tekankiri  = true;
+				});
+				
+				$(document).keyup(function(evt){
+					if (evt.keyCode == 39)
+						tekankanan = false;
+					if (evt.keyCode == 37)
+						tekankiri  = false;
+				});
+			});
+			
+		</script>
+	</head>
+	<body>
+		<canvas id="can-1" width="600" height="600" style="border:1px solid black"></canvas>
+		<div id="angka" align="center">
+		a
+		</div>
+	</body>
+</html>
